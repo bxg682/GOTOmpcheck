@@ -1,0 +1,15 @@
+# MPcheck.py
+
+import sys
+from astroquery.imcce import Skybot
+from astropy.coordinates import SkyCoord
+from astropy.time import Time
+import astropy.units as u
+
+ra, dec = float(sys.argv[1]), float(sys.argv[2])
+field = SkyCoord(ra*u.deg, dec*u.deg)
+epoch = Time(str(sys.argv[3])+' '+str(sys.argv[4]), format='iso')
+try:
+    Skybot.cone_search(field, 5*u.arcmin, epoch)
+except RuntimeError:
+    print("No solar system object was found in the requested FOV: RA(deg) DEC(deg): "+str(field.ra.deg)+" "+str(field.dec.deg)+" EPOCH: "+str(epoch))
